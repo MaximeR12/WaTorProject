@@ -134,10 +134,10 @@ class Requin(Creature):
         """takes the dictionnary from cases_autour and return coordinates of dico["thons"] if not empty, else it returns coordinates from dico[empty]
 
         Args:
-            dico (_type_): _description_
+            dico (dict): dict with keys : "vide" "requins" "thons"
 
         Returns:
-            _type_: _description_
+            list: list of 2 coordinates that represents where the object should go
         """
         if dico["thons"] != []:
             return choice(dico["thons"])
