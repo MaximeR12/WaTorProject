@@ -1,4 +1,5 @@
 from random import randint,choice
+import tkinter as tk
 #####################################################################################################
 ##############################        CLASS  WORLD     ##############################################
 #####################################################################################################
@@ -20,15 +21,14 @@ class World:
 
 
     def display_world(self):
+        """Print the grid with ' ' as water, 'R' for sharks, 'T' for poissons
         """
-        Print the grid with ' ' as water, 'R' for sharks, 'T' for thons
-        """
-        barre=(8*(self.taille[1])-1)*'-'
+        barre=(2*(self.taille[1])-1)*'-'
         print(f'+{barre}+')
         for ligne in self.grille:
             print('⏐',end='')
             for content in ligne:
-                print (content,end="\t")
+                print (content,end=" ")
             print('⏐',end="\n")
         print(f'+{barre}+')
 
@@ -50,19 +50,19 @@ class World:
                 self.grille[y][x] = 'R'               #si c'est le cas, on la remplace par un requin
 
     
-    def generer_thons(self, nb_thons):
+    def generer_poissons(self, nb_poissons):
         """generate fishes in the self.grille grid
 
         Args:
-            nb_thons (int): _description_
+            nb_poissons (int): _description_
         """
         compteur = 0
-        while compteur < nb_thons:
+        while compteur < nb_poissons:
             y = randint(0,self.taille[0]-1)
             x = randint(0,self.taille[1]-1)
             if self.grille[y][x]==' ':                #On cherche a verifier si le X ième element de la Y ième liste est vide
-                self.liste_poissons.append(Thon(y,x))
-                self.grille[y][x] = 'T'           #si c'est le cas, on la remplace par un thon
+                self.liste_poissons.append(Poisson(y,x))
+                self.grille[y][x] = 'T'           #si c'est le cas, on la remplace par un poisson
                 compteur +=1
 
     def mourir(self, coord):
@@ -117,9 +117,9 @@ class Requin():
             monde (object): instance of the world in which the grid must be checked
 
         Returns:
-            dict: dict containing lists of coordinates of empty cases at key "vide", coordinates of cases with sharks at key "requins", coordinates of cases with fishes at key "thons"
+            dict: dict containing lists of coordinates of empty cases at key "vide", coordinates of cases with sharks at key "requins", coordinates of cases with fishes at key "poissons"
         """
-        liste_vide ,liste_thon, liste_requin = [], [], []
+        liste_vide ,liste_poisson, liste_requin = [], [], []
 
         hauteur = monde.taille[0]
         largeur = monde.taille[1]
@@ -134,24 +134,24 @@ class Requin():
             if monde.grille[l[0]][l[1]] == 'R':
                 liste_requin.append(l)
             elif monde.grille[l[0]][l[1]] == 'T':
-                liste_thon.append(l)
+                liste_poisson.append(l)
             else:
                 liste_vide.append(l)
         
-        return {"vide" : liste_vide, "thons" : liste_thon, "requins" : liste_requin}
+        return {"vide" : liste_vide, "poissons" : liste_poisson, "requins" : liste_requin}
 
 
     def choix_deplacement(self, dico):
-        """takes the dictionnary from cases_autour and return coordinates of dico["thons"] if not empty, else it returns coordinates from dico[empty]
+        """takes the dictionnary from cases_autour and return coordinates of dico["poissons"] if not empty, else it returns coordinates from dico[empty]
 
         Args:
-            dico (dict): dict with keys : "vide" "requins" "thons"
+            dico (dict): dict with keys : "vide" "requins" "poissons"
 
         Returns:
             list: list of 2 coordinates that represents where the object should go
         """
-        if dico["thons"] != []:
-            return choice(dico["thons"])
+        if dico["poissons"] != []:
+            return choice(dico["poissons"])
         elif dico["vide"]==[]:
             return []
         return choice(dico["vide"])
@@ -199,7 +199,7 @@ class Requin():
 ######################################    CLASS  POISSONS   #########################################
 #####################################################################################################
 
-class Thon():
+class Poisson():
     limite_reproduction = 5
     def __init__(self, ligne, colonne) -> None:
         self.compteur_reproduction = 0
@@ -248,7 +248,7 @@ class Thon():
 
     def se_deplacer(self, monde, coord):
         """moves the self representation in the grid and changes the self.ligne, self.colonne
-        if the self has survived enough turns to reproduce, creates a new Thon object at the old position of self
+        if the self has survived enough turns to reproduce, creates a new Poisson object at the old position of self
 
         Args:
             monde (object): instance of Monde object
@@ -264,7 +264,7 @@ class Thon():
             if self.compteur_reproduction >= self.limite_reproduction:
                 monde.grille[coord[0]][coord[1]] = 'T'
                 monde.grille[ligne_avant][colonne_avant] = 'T'
-                (monde.nouv_poiss).append(Thon(ligne_avant, colonne_avant))
+                (monde.nouv_poiss).append(Poisson(ligne_avant, colonne_avant))
                 self.compteur_reproduction = -1
             else:
                 monde.grille[coord[0]][coord[1]] = 'T'

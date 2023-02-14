@@ -1,21 +1,21 @@
 ##########################   IMPORTATION & DEFINITIION DES CONSTANTES ########################
 
-from utils import World, Thon, Requin
+from utils import World, Poisson, Requin
 from os import system
 from time import sleep
 
 hauteur = 20
-largeur = 13
+largeur = 20
 
 
 ##########################   INITIALISATION DU MONDE       ###################################
 
 monde = World(hauteur,largeur)
 monde.generer_requins(monde.taille[2]//8)
-monde.generer_thons(monde.taille[2]//3)
-Thon.limite_reproduction = 4
+monde.generer_poissons(monde.taille[2]//3)
+Poisson.limite_reproduction = 4
 Requin.energie = 7
-Requin.limite_reproduction = 8
+Requin.limite_reproduction = 9
 Requin.gain_energie = 5
 compteur_tours = 0
 
@@ -36,7 +36,7 @@ while len(monde.liste_requins) > 0 and len(monde.liste_poissons) > 0:
         poisson.se_deplacer(monde, poisson.choix_deplacement(poisson.cases_autour(monde)))
         monde.update_creatures()
     compteur_tours+=1
-    sleep(0.3)
+    sleep(0.5)
 
 
 ####################### AFFICHAGE APRES FIN DE LA BOUCLE  ###################################
